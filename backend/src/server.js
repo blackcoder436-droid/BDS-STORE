@@ -169,11 +169,11 @@ async function startServer() {
     logger.info('🚀 Starting BDS STORE VPN API Server...');
     await testConnection();
 
-    // 2. Sync database models (alter in dev, safe in prod)
-    // ဒေတာဘေ့စ် models ကို sync ပြုလုပ်ခြင်း
-    await syncDatabase({
-      alter: config.isDev, // Only alter tables in development
-    });
+    // 2. Sync database models (runtimes table sync disabled, use npm run db:sync manually)
+    // ဒေတာဘေ့စ် models ကို sync ပြုလုပ်ခြင်း (server run ချိန်တွင် disable ထားသည်၊ လက်動 syncDb.js သုံးရန်)
+    if (process.env.DB_SYNC === 'true') {
+      await syncDatabase({ alter: config.isDev });
+    }
 
     // 3. Start Express server
     // Express server ကို စတင်ခြင်း
